@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import InfiniteScroll from 'react-infinite-scroller';
 
 interface Parameters {
     searchTerm: string;
@@ -10,22 +11,52 @@ interface Parameters {
 
 export default function Gallery(parameters: Parameters) {
 
-    const [data, setData] = React.useState([]);
+    const result: JSON[] = []
+    const [data, setData] = React.useState(result);
+    const [loading, setLoading] = React.useState(true);
+    const [error, setError] = React.useState(false);
+    const [hasMore, setHasMore] = React.useState(false);
+    const [url, setURL] = React.useState("");
 
-    if (parameters.searchTerm === "" && parameters.primaryType === "" && parameters.secondaryType === "" && parameters.generation === "") {
-        getData();
-        function getData() {
-            axios({
-                method: 'GET',
-                url: 'https://pokeapi.co/api/v2/pokemon'
-            }).then(res => {
-                setData(res.data)
-            })
-        }
+    React.useEffect(() => {
+        setData(result)
+    }, [parameters.searchTerm, parameters.generation, parameters.primaryType, parameters.secondaryType])
+
+    React.useEffect(() => {
+        setLoading(true)
+        setError(false)
+        axios({
+            method: 'GET',
+            url: 'https://pokeapi.co/api/v2/pokemon'
+        }).then(res => {
+            setData([...data, ...res.data.results]);
+            console.log(res.data.results);
+            setURL(res.data.next);
+            setHasMore(res.data.count > 0);
+            setLoading(false);
+        })
+    }, [])
+
+    function getData() {
+        setLoading(true)
+        setError(false)
+        axios({
+            method: 'GET',
+            url: `${url}`
+        }).then(res => {
+            setData([...data, ...res.data.results]);
+            setURL(res.data.next)
+            setHasMore(res.data.count > 0);
+            setLoading(false)
+        })
     }
+
 
     return (
         <>
+            {data.map((pokemon) => (
+                <p>{pokemon.name}</p>
+            ))}
         </>
     );
 }
