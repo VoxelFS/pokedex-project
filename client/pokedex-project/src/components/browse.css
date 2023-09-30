@@ -1,0 +1,27 @@
+.search-area {
+    display: flex;
+    background-color: #B29CBB;
+    margin-top: 40px;
+    min-height: 250px;
+    box-shadow: inset 0 0 6px rgb(85, 84, 84);
+    min-width: 100vw;
+}
+
+.search-bars {
+    display: flex;
+    align-items: center;
+    margin-top: 50px;
+    margin-left: 150px;
+}
+
+.MuiTextField-root {
+    background-color: white;
+    border-radius: 5px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-color: black;
+}
+
+.display-area {
+    display: flex;
+}

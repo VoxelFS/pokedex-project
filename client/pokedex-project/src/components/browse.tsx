@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import NavBar from "./navbar";
-import '/Users/Owen/Desktop/pokedex/client/pokedex-project/src/css/browse.css';
+import './browse.css';
 import { Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import Gallery from "./gallery";
 
 export default function Browse() {
 
@@ -49,15 +50,15 @@ export default function Browse() {
     ];
 
     const generations = [
-        'Generation I',
-        'Generation II',
-        'Generation III',
-        'Generation IV',
-        'Generation V',
-        'Generation VI',
-        'Generation VII',
-        'Generation VIII',
-        'Generation IX'
+        ['Generation I', '1'],
+        ['Generation II', '2'],
+        ['Generation III', '3'],
+        ['Generation IV', '4'],
+        ['Generation V', '5'],
+        ['Generation VI', '6'],
+        ['Generation VII', '7'],
+        ['Generation VIII', '8'],
+        ['Generation IX', '9']
     ];
 
     return (
@@ -139,8 +140,8 @@ export default function Browse() {
                                 <em>None</em>
                             </MenuItem>
                             {generations.map((generation) => (
-                                <MenuItem value={generation}>
-                                    <em>{generation}</em>
+                                <MenuItem value={generation[1]}>
+                                    <em>{generation[0]}</em>
                                 </MenuItem>
                             ))}
                         </Select>
@@ -150,6 +151,9 @@ export default function Browse() {
                 </Stack>
             </div>
         </div>
+            <div className="display-area">
+                <Gallery searchTerm={search} primaryType={primaryType} secondaryType={secondaryType} generation={generation} />
+            </div>
         </>
     );
 }
