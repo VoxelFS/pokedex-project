@@ -10,10 +10,19 @@ interface Parameters {
 
 export default function Gallery(parameters: Parameters) {
 
-    React.useEffect(() => {
-        
+    const [data, setData] = React.useState([]);
 
-    }, []);
+    if (parameters.searchTerm === "" && parameters.primaryType === "" && parameters.secondaryType === "" && parameters.generation === "") {
+        getData();
+        function getData() {
+            axios({
+                method: 'GET',
+                url: 'https://pokeapi.co/api/v2/pokemon'
+            }).then(res => {
+                setData(res.data)
+            })
+        }
+    }
 
     return (
         <>
