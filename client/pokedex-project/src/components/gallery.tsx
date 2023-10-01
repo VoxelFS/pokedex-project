@@ -15,48 +15,55 @@ export default function Gallery(parameters: Parameters) {
     const [data, setData] = React.useState(result);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(false);
-    const [hasMore, setHasMore] = React.useState(false);
-    const [url, setURL] = React.useState("");
+    const [hasMore, setHasMore] = React.useState(true);
+    const [offset, setOffset] = React.useState(0);
+    const [pokemonData, setPokemonData] = React.useState(result);
 
     React.useEffect(() => {
-        setData(result)
+        setData(result);
+        setOffset(0);
+        //try returning a different function here
     }, [parameters.searchTerm, parameters.generation, parameters.primaryType, parameters.secondaryType])
 
-    React.useEffect(() => {
-        setLoading(true)
-        setError(false)
-        axios({
-            method: 'GET',
-            url: 'https://pokeapi.co/api/v2/pokemon'
-        }).then(res => {
-            setData([...data, ...res.data.results]);
-            console.log(res.data.results);
-            setURL(res.data.next);
-            setHasMore(res.data.count > 0);
-            setLoading(false);
-        })
-    }, [])
+    //second useeffect here that changes depending on the params and etc. 
+    //this useeffect will grab the list of ALL 1010 pokemon and will sort them based on the param
+    // create functions in here that will sort them
 
-    function getData() {
-        setLoading(true)
-        setError(false)
-        axios({
-            method: 'GET',
-            url: `${url}`
-        }).then(res => {
-            setData([...data, ...res.data.results]);
-            setURL(res.data.next)
-            setHasMore(res.data.count > 0);
-            setLoading(false)
-        })
+    async function temp() {
+        setLoading(true);
+        setError(false);
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${20}`);
+        const result = await response.data
+        setData([...data, ...result.results]);
+        setOffset(offset + 20);
+        setHasMore(result.count > 0);
+        setLoading(false);
     }
 
+    async function fetchPokemonData(pokemon: any) {
+        const response = await axios.get(pokemon.url);
+        const result= await response.data;
 
+    }
+
+    //infinite scroll here. 
+    //use mui and card to create a gallery
     return (
         <>
-            {data.map((pokemon) => (
+            <InfiniteScroll 
+                pageStart={0}
+                loadMore={temp}
+                hasMore={hasMore}
+                loader={
+                    <div className="loader" key="loader">
+                        Loading...
+                    </div>
+                }
+            >
+            {data.map((pokemon: any) => (
                 <p>{pokemon.name}</p>
             ))}
+            </InfiniteScroll>
         </>
     );
 }
