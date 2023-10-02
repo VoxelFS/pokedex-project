@@ -1,16 +1,21 @@
 import React from "react";
 import NavBar from "./navbar";
 import './browse.css';
-import { Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
 import Gallery from "./gallery";
+import axios from "axios";
 
 export default function Browse() {
 
     const [search, setSearch] = React.useState("");
     const [primaryType, setPrimaryType] = React.useState("");
     const [secondaryType, setSecondaryType] = React.useState("");
-    const [showSearch, setShowSearch] = React.useState(false);
     const [generation, setGeneration] = React.useState("");
+    const temp: JSON[] = []
+    const [data, setData] = React.useState(temp);
+    const [pokemonData, setPokemonData] = React.useState(temp);
 
     const handleChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setSearch(e.target.value);
@@ -61,12 +66,41 @@ export default function Browse() {
         ['Generation IX', '9']
     ];
 
+    //filter data in here
+    //pass in all data into a gallery which will render it
+
+    React.useEffect(() => {
+        getData();
+
+        async function getData() {
+            if (generation === "") {
+                const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=1010`);
+                const result = await response.data;
+                setData(temp);
+                setData([...[], ...result.results]);
+            }
+            else if (generation !== "") {
+                const response = await axios.get(`https://pokeapi.co/api/v2/generation/${parseInt(generation)}/`);
+                const result = await response.data;
+                setData(temp);
+                setData(result);
+            }
+        }
+    }, [search, primaryType, secondaryType, generation]);
+
+    async function getPokemonData(pokemon: any) {
+        const url = pokemon.url;
+        const response = await axios.get(url);
+        const result = await response.data;
+        setPokemonData(temp);
+        setPokemonData(result);
+    }
+
     return (
         <>
         <NavBar />
         <div className="search-area">
             <div className="search-bars">
-                <Stack spacing={2}>
                 <Stack direction="row" spacing={2}>
                     <TextField
                         id="pokemon_name"
@@ -77,6 +111,11 @@ export default function Browse() {
                         onChange={handleChange}
                         autoFocus
                         sx={{ width: 500 }}
+                        InputProps={{ startAdornment: (
+                            <InputAdornment position='start'>
+                                <SearchIcon />
+                            </InputAdornment>
+                        ) }}
                     />
                     <FormControl variant="filled" sx={{ m:1, minWidth: 180 }}>
                         <InputLabel id="select-primary-type">Primary Type</InputLabel>
@@ -119,15 +158,7 @@ export default function Browse() {
                         </Select>
                     </FormControl>
 
-                    <Button variant="contained">Search</Button>
-                </Stack>
-                    
-                    {!showSearch && (
-                        <Button variant="text" onClick={() => setShowSearch(true)}>More Filters</Button>
-                    )}
-
-                    {showSearch && (
-                        <FormControl variant="filled" sx={{ m:1, maxWidth: 180 }}>
+                    <FormControl variant="filled" sx={{ m:1, minWidth: 180 }}>
                         <InputLabel id="select-generation">Generation</InputLabel>
                         <Select
                             labelId="generation"
@@ -135,6 +166,7 @@ export default function Browse() {
                             value={generation}
                             label="Generation"
                             onChange={handleGeneration}
+                            sx={{ backgroundColor: "white" }}
                         >
                             <MenuItem value="">
                                 <em>None</em>
@@ -146,13 +178,13 @@ export default function Browse() {
                             ))}
                         </Select>
                     </FormControl>
-                    )}
-
                 </Stack>
+
+                
             </div>
         </div>
             <div className="display-area">
-                <Gallery searchTerm={search} primaryType={primaryType} secondaryType={secondaryType} generation={generation} />
+                {/*<Gallery searchTerm={search} primaryType={primaryType} secondaryType={secondaryType} generation={generation} />*/}
             </div>
         </>
     );

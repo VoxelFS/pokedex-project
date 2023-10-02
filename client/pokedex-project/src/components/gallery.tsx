@@ -9,7 +9,12 @@ interface Parameters {
     generation: string;
 }
 
-export default function Gallery(parameters: Parameters) {
+export default function Gallery({searchTerm, primaryType, secondaryType, generation}: Parameters ) {
+
+    console.log(searchTerm);
+    console.log(primaryType);
+    console.log(secondaryType);
+    console.log(generation);
 
     const result: JSON[] = []
     const [data, setData] = React.useState(result);
@@ -18,16 +23,22 @@ export default function Gallery(parameters: Parameters) {
     const [hasMore, setHasMore] = React.useState(true);
     const [offset, setOffset] = React.useState(0);
     const [pokemonData, setPokemonData] = React.useState(result);
+    const [show, setShow] = React.useState(true);
+
 
     React.useEffect(() => {
+        setShow(false);
         setData(result);
         setOffset(0);
-        //try returning a different function here
-    }, [parameters.searchTerm, parameters.generation, parameters.primaryType, parameters.secondaryType])
+    }, [searchTerm, generation, primaryType, secondaryType]);
 
     //second useeffect here that changes depending on the params and etc. 
     //this useeffect will grab the list of ALL 1010 pokemon and will sort them based on the param
     // create functions in here that will sort them
+
+    React.useEffect(() => {
+        setShow(true);
+    }, [searchTerm === "", generation === "", primaryType === "", secondaryType === ""]);
 
     async function temp() {
         setLoading(true);
@@ -49,7 +60,8 @@ export default function Gallery(parameters: Parameters) {
     //infinite scroll here. 
     //use mui and card to create a gallery
     return (
-        <>
+        <> 
+        {show && (
             <InfiniteScroll 
                 pageStart={0}
                 loadMore={temp}
@@ -64,6 +76,7 @@ export default function Gallery(parameters: Parameters) {
                 <p>{pokemon.name}</p>
             ))}
             </InfiniteScroll>
+        )}
         </>
     );
 }
