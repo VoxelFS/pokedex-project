@@ -66,6 +66,14 @@ export default function Browse() {
         ['Generation IX', '9']
     ];
 
+    async function getPokemonData(pokemon: any) {
+        const url = pokemon.url;
+        const response = await axios.get(url);
+        const result = await response.data;
+        setPokemonData(temp);
+        setPokemonData(result);
+    }
+
     //filter data in here
     //pass in all data into a gallery which will render it
 
@@ -86,15 +94,23 @@ export default function Browse() {
                 setData(result);
             }
         }
-    }, [search, primaryType, secondaryType, generation]);
+    }, [generation]);
 
-    async function getPokemonData(pokemon: any) {
-        const url = pokemon.url;
-        const response = await axios.get(url);
-        const result = await response.data;
-        setPokemonData(temp);
-        setPokemonData(result);
-    }
+    React.useEffect(() => {
+        console.log(data);
+        data.filter((pokemon) => {
+            getPokemonData(pokemon);
+            let status = false;
+            if (search !== "") {
+                status = pokemonData.name.includes(search);
+            }
+            if (primaryType !== "") {
+                status = pokemonData.types[0].type.name === primaryType.toLowerCase();
+            }
+            return status;
+        })
+        console.log(data);
+    }, [search, primaryType, secondaryType, generation]);
 
     return (
         <>
