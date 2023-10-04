@@ -13,7 +13,7 @@ export default function Browse() {
     const [primaryType, setPrimaryType] = React.useState("");
     const [secondaryType, setSecondaryType] = React.useState("");
     const [generation, setGeneration] = React.useState("");
-    const temp: JSON[] = []
+    const temp: any = [];
     const [data, setData] = React.useState(temp);
     const [pokemonData, setPokemonData] = React.useState(temp);
 
@@ -66,12 +66,10 @@ export default function Browse() {
         ['Generation IX', '9']
     ];
 
-    async function getPokemonData(pokemon: any) {
-        const url = pokemon.url;
-        const response = await axios.get(url);
-        const result = await response.data;
-        setPokemonData(temp);
-        setPokemonData(result);
+    async function getPokemonData(url: string) {
+        const response = await fetch(url);
+        const result = await response.json();
+        return result;
     }
 
     //filter data in here
@@ -82,35 +80,29 @@ export default function Browse() {
 
         async function getData() {
             if (generation === "") {
-                const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=1010`);
-                const result = await response.data;
-                setData(temp);
-                setData([...[], ...result.results]);
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1010`);
+                const result = await response.json();
+                const apiCalls = result.results.map((pokemon: any) => {
+                    return getPokemonData(pokemon.url);
+                })
+                const pokemonData = await Promise.all(apiCalls);
+                setData([]);
+                setData(pokemonData);
             }
             else if (generation !== "") {
-                const response = await axios.get(`https://pokeapi.co/api/v2/generation/${parseInt(generation)}/`);
-                const result = await response.data;
-                setData(temp);
-                setData(result);
+                const response = await fetch(`https://pokeapi.co/api/v2/generation/${parseInt(generation)}/`);
+                const result = await response.json();
+                const apiCalls = result.results.map((pokemon: any) => {
+                    return getPokemonData(pokemon.url);
+                })
+                const pokemonData = await Promise.all(apiCalls);
+                setData([]);
+                setData(pokemonData);
             }
         }
-    }, [generation]);
+    }, []);
 
-    React.useEffect(() => {
-        console.log(data);
-        data.filter((pokemon) => {
-            getPokemonData(pokemon);
-            let status = false;
-            if (search !== "") {
-                status = pokemonData.name.includes(search);
-            }
-            if (primaryType !== "") {
-                status = pokemonData.types[0].type.name === primaryType.toLowerCase();
-            }
-            return status;
-        })
-        console.log(data);
-    }, [search, primaryType, secondaryType, generation]);
+    
 
     return (
         <>
