@@ -1,10 +1,10 @@
 import React from "react";
-import NavBar from "./navbar";
+import NavBar from "./navbar.tsx";
 import './browse.css';
 import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-import Gallery from "./gallery";
+import Gallery from "./gallery.tsx";
 import axios from "axios";
 
 export default function Browse() {
@@ -15,6 +15,7 @@ export default function Browse() {
     const [generation, setGeneration] = React.useState("");
     const temp: any = [];
     const [data, setData] = React.useState(temp);
+    const [filteredData, setFilteredData] = React.useState(temp);
     const [pokemonData, setPokemonData] = React.useState(temp);
 
     const handleChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -80,19 +81,20 @@ export default function Browse() {
 
         async function getData() {
             if (generation === "") {
-                const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1010`);
-                const result = await response.json();
+                const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=1010`);
+                const result = await response.data;
                 const apiCalls = result.results.map((pokemon: any) => {
                     return getPokemonData(pokemon.url);
                 })
                 const pokemonData = await Promise.all(apiCalls);
                 setData([]);
                 setData(pokemonData);
+                setFilteredData(pokemonData);
             }
             else if (generation !== "") {
-                const response = await fetch(`https://pokeapi.co/api/v2/generation/${parseInt(generation)}/`);
-                const result = await response.json();
-                const apiCalls = result.results.map((pokemon: any) => {
+                const response = await axios.get(`https://pokeapi.co/api/v2/generation/${parseInt(generation)}/`);
+                const result = await response.data;
+                const apiCalls = result.pokemon_species.map((pokemon: any) => {
                     return getPokemonData(pokemon.url);
                 })
                 const pokemonData = await Promise.all(apiCalls);
@@ -100,9 +102,28 @@ export default function Browse() {
                 setData(pokemonData);
             }
         }
-    }, []);
+    }, [generation]);
 
-    
+    React.useEffect(() => {
+        setFilteredData(temp);
+        const filtered = data.filter((pokemon: any) => {
+            return check(pokemon);
+        });
+        setFilteredData(filtered);
+    }, [search, primaryType, secondaryType, generation]);    
+
+    function check(pokemon: any) {
+        const primaryTypeMatch =
+            !primaryType || pokemon.types[0].type.name === primaryType.toLowerCase();
+
+        const secondaryTypeMatch =
+            !secondaryType ||
+                (pokemon.types.length > 1 && pokemon.types[1].type.name === secondaryType.toLowerCase());
+
+        const nameMatch = !search || pokemon.name.includes(search);
+
+        return primaryTypeMatch && secondaryTypeMatch && nameMatch;
+    }
 
     return (
         <>
@@ -192,7 +213,7 @@ export default function Browse() {
             </div>
         </div>
             <div className="display-area">
-                {/*<Gallery searchTerm={search} primaryType={primaryType} secondaryType={secondaryType} generation={generation} />*/}
+                <Gallery pokemonArray={filteredData} />
             </div>
         </>
     );
