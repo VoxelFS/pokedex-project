@@ -4,7 +4,7 @@ import './browse.css';
 import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-import Gallery from "./gallery.tsx";
+import Gallery from "./Gallery.tsx";
 import axios from "axios";
 
 export default function Browse() {
@@ -73,6 +73,14 @@ export default function Browse() {
         return result;
     }
 
+    async function getPokemonGenData(name: string) {
+        const response = await fetch(
+            `https://pokeapi.co/api/v2/pokemon/${name}`
+        );
+        const result = await response.json();
+        return result;
+    }
+
     //filter data in here
     //pass in all data into a gallery which will render it
 
@@ -92,14 +100,16 @@ export default function Browse() {
                 setFilteredData(pokemonData);
             }
             else if (generation !== "") {
+                setFilteredData(temp);
                 const response = await axios.get(`https://pokeapi.co/api/v2/generation/${parseInt(generation)}/`);
                 const result = await response.data;
                 const apiCalls = result.pokemon_species.map((pokemon: any) => {
-                    return getPokemonData(pokemon.url);
+                    return getPokemonGenData(pokemon.name);
                 })
                 const pokemonData = await Promise.all(apiCalls);
                 setData([]);
                 setData(pokemonData);
+                setFilteredData(pokemonData);
             }
         }
     }, [generation]);
