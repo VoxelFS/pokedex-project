@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "./navbar.tsx";
+import NavBar from "./Navbar.tsx";
 import './browse.css';
 import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import InputAdornment from '@mui/material/InputAdornment';
@@ -16,7 +16,6 @@ export default function Browse() {
     const temp: any = [];
     const [data, setData] = React.useState(temp);
     const [filteredData, setFilteredData] = React.useState(temp);
-    const [pokemonData, setPokemonData] = React.useState(temp);
 
     const handleChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setSearch(e.target.value);
