@@ -1,8 +1,8 @@
-import React from "react";
 import { Box, Button, Card, CardActions, CardContent, CardMedia, Grid, Stack, Typography } from "@mui/material";
+import { pokemonType, type } from "../utils/types";
 
 interface Data {
-    pokemonArray: any;
+    pokemonArray: pokemonType[];
 }
 
 export default function Gallery({pokemonArray}: Data ) {
@@ -60,7 +60,7 @@ export default function Gallery({pokemonArray}: Data ) {
                                     <b>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</b>
                                 </Typography>
                                 <Stack direction="row" spacing={2} sx={{ display: "flex", justifyContent: "center" }}>
-                                    {pokemon.types.map((type: any) => (
+                                    {pokemon.types.map((type: type) => (
                                         <Box component="section" 
                                             sx={{ 
                                                 display: "flex", 
@@ -69,9 +69,9 @@ export default function Gallery({pokemonArray}: Data ) {
                                                 minWidth: 50, 
                                                 maxHeight: 5, 
                                                 alignItems: "center", 
-                                                justifyContent: "center"
+                                                justifyContent: "center",
                                             }} 
-                                            backgroundColor={colours[type.type.name]} >
+                                            bgcolor={colours[type.type.name]} >
                                             <Typography variant="body2" sx={{ color: "white" }}>
                                                 <b>{type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}</b>
                                             </Typography>
@@ -80,7 +80,7 @@ export default function Gallery({pokemonArray}: Data ) {
                                 </Stack>
                             </CardContent>
                             <CardActions>
-                                <Button size="small">Learn More</Button>
+                                <Button size="small" onClick={() => window.open("/pokemon/" + pokemon.name, '_blank')}>Learn More</Button>
                             </CardActions>
                         </Card>
                     </Grid>

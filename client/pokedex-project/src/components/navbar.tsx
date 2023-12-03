@@ -7,12 +7,14 @@ import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function NavBar() {
 
-    const pages = [['Home', '/'], ['Browse All Pokemon', '/browse'], ['About', '/about']];
+    const pages = [['Home', '/']];
     const settings = ['Profile', 'Logout'];
+    const navigate = useNavigate();
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -24,8 +26,9 @@ export default function NavBar() {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = () => {
+    const handleCloseNavMenu = (url: string) => {
         setAnchorElNav(null);
+        navigate(url);
     };
 
     const handleCloseUserMenu = () => {
@@ -80,7 +83,7 @@ export default function NavBar() {
                                 }}
                             >
                                 {pages.map((page) => (
-                                    <MenuItem key={page[0]} onClick={handleCloseNavMenu}>
+                                    <MenuItem key={page[0]} onClick={() => handleCloseNavMenu(page[1])}>
                                         <Typography textAlign="center">{page[0]}</Typography>
                                     </MenuItem>
                                 ))}
@@ -109,7 +112,7 @@ export default function NavBar() {
                             {pages.map((page) => (
                             <Button
                                 key={page[0]}
-                                onClick={handleCloseNavMenu}
+                                onClick={() => handleCloseNavMenu(page[1])}
                                 sx={{ my: 2, color: 'white', display: 'block' }}
                             >
                                 {page[0]}

@@ -4,8 +4,9 @@ import './browse.css';
 import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-import Gallery from "./Gallery.tsx";
 import axios from "axios";
+import { pokemonObj, pokemonType } from "../utils/types.tsx";
+import Gallery from "./gallery.tsx";
 
 export default function Browse() {
 
@@ -90,7 +91,8 @@ export default function Browse() {
             if (generation === "") {
                 const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=1010`);
                 const result = await response.data;
-                const apiCalls = result.results.map((pokemon: any) => {
+                console.log(result.results);
+                const apiCalls = result.results.map((pokemon: pokemonObj) => {
                     return getPokemonData(pokemon.url);
                 })
                 const pokemonData = await Promise.all(apiCalls);
@@ -102,7 +104,7 @@ export default function Browse() {
                 setFilteredData(temp);
                 const response = await axios.get(`https://pokeapi.co/api/v2/generation/${parseInt(generation)}/`);
                 const result = await response.data;
-                const apiCalls = result.pokemon_species.map((pokemon: any) => {
+                const apiCalls = result.pokemon_species.map((pokemon: pokemonObj) => {
                     return getPokemonGenData(pokemon.name);
                 })
                 const pokemonData = await Promise.all(apiCalls);
@@ -115,13 +117,13 @@ export default function Browse() {
 
     React.useEffect(() => {
         setFilteredData(temp);
-        const filtered = data.filter((pokemon: any) => {
+        const filtered = data.filter((pokemon: pokemonType) => {
             return check(pokemon);
         });
         setFilteredData(filtered);
     }, [search, primaryType, secondaryType, generation]);    
 
-    function check(pokemon: any) {
+    function check(pokemon: pokemonType) {
         const primaryTypeMatch =
             !primaryType || pokemon.types[0].type.name === primaryType.toLowerCase();
 
