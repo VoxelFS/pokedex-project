@@ -1,12 +1,14 @@
 import React from "react";
-import NavBar from "./Navbar";
+import NavBar from "./Navbar.tsx";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { Box, Stack, Typography } from "@mui/material";
+import { appendZero } from "./Gallery.tsx";
+import { pokemonType } from "../utils/types.tsx";
 
 export default function PokemonDetails() {
-    const {pokemonName} = useParams();
-    const [pokemonData, setPokemonData] = React.useState([]);
-    console.log(pokemonName);
+    const {pokemonName}: any = useParams();
+    const [pokemonData, setPokemonData] = React.useState<pokemonType>({} as unknown as pokemonType);
 
     React.useEffect(() => {
 
@@ -17,11 +19,26 @@ export default function PokemonDetails() {
             const results = await response.data;
             setPokemonData(results);
         }
-    }, [])
+    }, []);
+
     return (
         <>
             <NavBar />
-            <h1>{pokemonName}</h1>
+            <Box component="section" 
+                sx={{
+                    display: "flex",
+                    marginTop: 10,
+                    marginLeft: 2
+                }}>
+                <Typography variant="h3" gutterBottom>
+                    <b>{pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1)} #{appendZero(pokemonData.id)}</b>
+                </Typography>
+            </Box>
+            <Stack spacing={2}>
+                <Stack direction="row" spacing={4}>
+                    
+                </Stack>
+            </Stack>
         </>
     );
 }

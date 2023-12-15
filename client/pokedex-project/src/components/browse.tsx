@@ -6,7 +6,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from "axios";
 import { pokemonObj, pokemonType } from "../utils/types.tsx";
-import Gallery from "./gallery.tsx";
+import Gallery from "./Gallery.tsx";
 
 export default function Browse() {
 

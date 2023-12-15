@@ -1,6 +1,6 @@
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
-import Browse from './components/browse'
+import Browse from './components/Browse'
 import PokemonDetails from './components/PokemonDetails'
 
 

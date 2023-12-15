@@ -5,6 +5,18 @@ interface Data {
     pokemonArray: pokemonType[];
 }
 
+export function appendZero(id: number) {
+    if (id < 10) {
+        return "00" + id;
+    } else if (id >= 10 && id < 100) {
+        return "0" + id;
+    } else if (id >= 100 && id < 1000) {
+        return id;
+    } else {
+        return id;
+    }
+}
+
 export default function Gallery({pokemonArray}: Data ) {
 
     const colours = {
@@ -28,17 +40,6 @@ export default function Gallery({pokemonArray}: Data ) {
         fairy: '#D685AD',
     };
 
-    function appendZero(id: number) {
-        if (id < 10) {
-            return "00" + id;
-        } else if (id >= 10 && id < 100) {
-            return "0" + id;
-        } else if (id >= 100 && id < 1000) {
-            return id;
-        } else {
-            return id;
-        }
-    }
     //use mui and card to create a gallery
     //stack and map the type arrays
     return (
