@@ -46,7 +46,7 @@ export default function Gallery({pokemonArray}: Data ) {
         <> 
             <Box component="section" sx={{ marginTop: 5, marginBottom: 5, flexGrow: 1, marginLeft: 19 }}>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 9, md: 12 }}>
-                    {pokemonArray.map((pokemon: any, index: number) => (
+                    {pokemonArray.map((pokemon: pokemonType, index: number) => (
                     <Grid item xs={1} sm={2} md={3} key={index}>
                         <Card sx={{ minWidth: 250 }} >
                             <CardMedia sx={{ height: 260 }} 

@@ -1,8 +1,13 @@
+interface baseTemplate {
+    name: string;
+    url: string;
+}
+
 export interface pokemonType {
     abilities: ability[]; 
     base_experience: number;
-    forms: {name: string; url: string}[];
-    game_indices: {game_index: number; version: {name: string; url: string}}[];
+    forms: baseTemplate[];
+    game_indices: {game_index: number; version: baseTemplate}[];
     height: number;
     held_items: item[];
     id: number;
@@ -13,11 +18,38 @@ export interface pokemonType {
     order: number;
     past_abilities: any;
     past_types: any;
-    species: {name: string; url: string};
-    sprites: sprite[];
+    species: baseTemplate;
+    sprites: sprite;
     stats: stat[];
     types: type[];
     weight: number
+}
+
+export interface pokemonSpecies {
+    base_happiness: number;
+    capture_rate: number;
+    color: baseTemplate;
+    egg_groups: baseTemplate[];
+    evolution_chain: {url: string};
+    evolves_from_species: undefined | baseTemplate;
+    flavor_text_entries: {flavor_text: string; language: baseTemplate; version: baseTemplate}[];
+    form_description: any;
+    forms_switchable: boolean;
+    gender_rate: number;
+    genera: {genus: string; language: baseTemplate}[];
+    generation: baseTemplate;
+    growth_rate: baseTemplate;
+    habitat: baseTemplate;
+    has_gender_difference: boolean;
+    hatch_counter: number;
+    id: number;
+    is_baby: boolean;
+    is_legendary: boolean;
+    is_mythical: boolean;
+    name: string;
+    names: {language: baseTemplate; name: string}[];
+    order: number;
+
 }
 
 export interface pokemonObj {
@@ -42,8 +74,8 @@ export interface move {
     url: string;
     version_group_details: {
         level_learned_at: number;
-        move_learn_method: {name: string; url: string}[];
-        version_group: {name: string; url: string};
+        move_learn_method: baseTemplate[];
+        version_group: baseTemplate;
     }
 }
 
