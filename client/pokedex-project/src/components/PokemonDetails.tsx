@@ -2,9 +2,9 @@ import React from "react";
 import NavBar from "./Navbar.tsx";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Box, Divider, Stack, Typography } from "@mui/material";
+import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
 import { appendZero } from "./Gallery.tsx";
-import { pokemonSpecies, pokemonType } from "../utils/types.tsx";
+import { ability, pokemonSpecies, pokemonType, type } from "../utils/types.tsx";
 
 export default function PokemonDetails() {
     const {pokemonName}: any = useParams();
@@ -29,6 +29,27 @@ export default function PokemonDetails() {
 
     }, []);
 
+    const colours = {
+        normal: '#A8A77A',
+        fire: '#EE8130',
+        water: '#6390F0',
+        electric: '#F7D02C',
+        grass: '#7AC74C',
+        ice: '#96D9D6',
+        fighting: '#C22E28',
+        poison: '#A33EA1',
+        ground: '#E2BF65',
+        flying: '#A98FF3',
+        psychic: '#F95587',
+        bug: '#A6B91A',
+        rock: '#B6A136',
+        ghost: '#735797',
+        dragon: '#6F35FC',
+        dark: '#705746',
+        steel: '#B7B7CE',
+        fairy: '#D685AD',
+    };
+
     if (isLoading) {
         return (
             <>
@@ -52,9 +73,9 @@ export default function PokemonDetails() {
                 </Typography>
                 
             </Box>
-            <Divider textAlign="left" sx={{ minWidth: "98vw", marginLeft: 2, marginRight: 2 }}>{pokemonSpecies.genera[7].genus}</Divider>
-            <Stack spacing={2}>
-                <Stack direction="row" spacing={4}>
+            <Divider textAlign="left" sx={{ minWidth: "98vw", marginLeft: 2, marginRight: 2, marginBottom: 4 }}>{pokemonSpecies.genera[7].genus}</Divider>
+            <Grid container spacing={4}>
+                <Grid item xs={3}>
                     <Box sx={{
                         display: "flex",
                         backgroundColor: "white",
@@ -64,14 +85,58 @@ export default function PokemonDetails() {
                         <Box 
                             component="img"
                             sx={{
-                                height: 260
+                                height: 280
                             }}
                             alt={pokemonName}
                             src={pokemonData.sprites.front_default} 
                         />
                     </Box>
-                </Stack>
-            </Stack>
+                </Grid>
+                <Grid item xs={3}>
+                    <Box sx={{
+                        textAlign: "left"
+                    }}>
+                        <Typography variant="h5" gutterBottom>
+                            Type
+                        </Typography>
+                        <Divider sx={{ marginBottom: 2 }}/>
+                        <Stack spacing={1}>
+                            {pokemonData.types.map((type: type) => (
+                                <Box component="section" 
+                                    sx={{ 
+                                        display: "flex", 
+                                        p: 2, 
+                                        borderRadius: 3, 
+                                        maxHeight: 2, 
+                                        alignItems: "center", 
+                                        justifyContent: "center",
+                                    }} 
+                                    bgcolor={colours[type.type.name]} >
+                                    <Typography variant="body2" sx={{ color: "white" }}>
+                                        <b>{type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}</b>
+                                    </Typography>
+                                </Box>
+                            ))}
+                        </Stack>
+                        <Typography variant="h5" gutterBottom sx={{ marginTop: 3 }}>
+                            Abilities
+                        </Typography>
+                        <Divider sx={{ marginBottom: 2 }}/>
+                        <Stack spacing={2}>
+                            {pokemonData.abilities.map((ability: ability) => (
+                                <Box component="section" sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    backgroundColor: "white",
+                                    borderRadius: 3
+                                }}>
+                                    Hi
+                                </Box>
+                            ))}
+                        </Stack>
+                    </Box>
+                </Grid>
+            </Grid>
         </>
     );
 }
