@@ -58,10 +58,9 @@ export interface pokemonObj {
 }
 
 export interface ability {
-    name: string;
-    url: string;
+    ability: baseTemplate;
     is_hidden: boolean;
-    slot: number
+    slot: number;
 }
 
 export interface item {
