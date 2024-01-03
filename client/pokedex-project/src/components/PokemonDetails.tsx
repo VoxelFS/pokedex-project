@@ -155,14 +155,10 @@ export default function PokemonDetails() {
                     </Box>
                 </Grid>
                 <Grid item xs={3}>
-                    <Box sx={{ 
-                        textAlign: "left"
-                    }}>
-                        <Typography variant="h6" gutterBottom>
-                            Weight & Height
-                        </Typography>
-                        <Divider sx={{ marginBottom: 2 }}/>
-                    </Box>
+                    <Typography variant="h6" gutterBottom sx={{ textAlign: "left" }}>
+                        Weight & Height
+                    </Typography>
+                    <Divider sx={{ marginBottom: 2 }}/>
                     <Stack spacing={1}>
                         <Box component="section" sx={{
                             display: "flex",
@@ -193,7 +189,7 @@ export default function PokemonDetails() {
                             </Typography>
                         </Box>
                     </Stack>
-                    <Typography variant="h6" gutterBottom sx={{ marginTop: 3 }}>
+                    <Typography variant="h6" gutterBottom sx={{ marginTop: 3, textAlign: "left" }}>
                         Pokedex Entry
                     </Typography>
                     <Divider sx={{ marginBottom: 2 }}/>
