@@ -32,7 +32,7 @@ export interface pokemonSpecies {
     egg_groups: baseTemplate[];
     evolution_chain: {url: string};
     evolves_from_species: undefined | baseTemplate;
-    flavor_text_entries: {flavor_text: string; language: baseTemplate; version: baseTemplate}[];
+    flavor_text_entries: flavorText[];
     form_description: any;
     forms_switchable: boolean;
     gender_rate: number;
@@ -50,6 +50,12 @@ export interface pokemonSpecies {
     names: {language: baseTemplate; name: string}[];
     order: number;
 
+}
+
+export interface flavorText {
+    flavor_text: string;
+    language: baseTemplate;
+    version: baseTemplate;
 }
 
 export interface pokemonObj {

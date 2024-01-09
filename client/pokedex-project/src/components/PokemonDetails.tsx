@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Box, Divider, Grid, Stack, Tooltip, Typography } from "@mui/material";
 import { appendZero } from "./Gallery.tsx";
-import { ability, pokemonSpecies, pokemonType, type } from "../utils/types.tsx";
+import { ability, flavorText, pokemonSpecies, pokemonType, type } from "../utils/types.tsx";
 import { VisibilityOff } from "@mui/icons-material";
 import ScaleIcon from '@mui/icons-material/Scale';
 import HeightIcon from '@mui/icons-material/Height';
@@ -202,7 +202,7 @@ export default function PokemonDetails() {
                             alignItems: "center"
                     }}>
                         <Typography variant="body2" gutterBottom sx={{ color: "black" }}>
-                            {pokemonSpecies.flavor_text_entries[6].flavor_text}
+                            {pokemonSpecies.flavor_text_entries.find((text: flavorText) => text.language.name === "en")?.flavor_text}
                         </Typography>
                     </Box>
                 </Grid>
