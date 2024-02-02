@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { stat } from '../utils/types';
+import { mangoFusionPaletteDark } from '@mui/x-charts/colorPalettes'
 
 interface statProp {
     pokeStats: stat[];
@@ -54,6 +55,7 @@ export default function Graph({pokeStats, name}: statProp) {
                     top: 20,
                     bottom: 40
                 }}
+                colors={mangoFusionPaletteDark}
                 {...chartSettings}
             />
         </>
