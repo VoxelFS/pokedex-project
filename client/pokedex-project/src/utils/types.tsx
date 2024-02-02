@@ -96,7 +96,7 @@ export interface sprite {
 }
 
 export interface stat {
-    base_state: number;
+    base_stat: number;
     effort: number;
     stat: {
         name: string;

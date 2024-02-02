@@ -8,6 +8,7 @@ import { ability, flavorText, pokemonSpecies, pokemonType, type } from "../utils
 import { VisibilityOff } from "@mui/icons-material";
 import ScaleIcon from '@mui/icons-material/Scale';
 import HeightIcon from '@mui/icons-material/Height';
+import Graph from "./Graph.tsx";
 
 export default function PokemonDetails() {
     const {pokemonName}: any = useParams();
@@ -204,6 +205,21 @@ export default function PokemonDetails() {
                         <Typography variant="body2" gutterBottom sx={{ color: "black" }}>
                             {pokemonSpecies.flavor_text_entries.find((text: flavorText) => text.language.name === "en")?.flavor_text}
                         </Typography>
+                    </Box>
+                </Grid>
+                <Grid item xs={3}>
+                    <Typography variant="h6" gutterBottom sx={{ textAlign: "left" }}>
+                        {pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1)}'s Stats
+                    </Typography>
+                    <Divider sx={{ marginBottom: 2 }} />
+                    <Box component="section" sx={{
+                        display: "flex",
+                        backgroundColor: "white",
+                        borderRadius: 3,
+                        minWidth: 600,
+                        maxHeight: 300
+                    }}>
+                    <Graph pokeStats={pokemonData.stats} name={pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1)} />
                     </Box>
                 </Grid>
             </Grid>
